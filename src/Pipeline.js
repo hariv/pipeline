@@ -4,17 +4,17 @@ import Stage from './Stage'
 //import './App.css';
 
 class Pipeline extends Component {
+    
     constructor(props) {
 	super(props);
-	this.state = {stages: props.stages}
+	this.state = {stages: props.stages};
     }
     
     render() {
 	let stageComponents = [];
 	
-	for(stage in this.state.stages) {
-	    stageComponents.push(<Stage stage={stage}>);
-	}
+	for(let stage in this.state.stages)
+	    stageComponents.push(<Stage stage={this.state.stages[stage]} />);
 	
 	return (
 		<div className="Pipeline">
