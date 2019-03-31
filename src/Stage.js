@@ -5,7 +5,7 @@ class Stage extends Component {
     render() {
 	return (
 		<div className="stage">
-		<div className="stageName">{this.props.stage}</div>
+		<div className="stageName" onMouseOver={this.props.onMouseOver}>{this.props.stage}</div>
 		<button className="stageDelete">X</button>
 		</div>
 		);

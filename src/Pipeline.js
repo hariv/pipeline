@@ -9,12 +9,15 @@ class Pipeline extends Component {
 	this.state = {stages: props.stages};
     }
     
+    showDelete() {
+	console.log("HELLO");
+    }
     render() {
 	let stageComponents = [], stage;
 	
 	for(let i in this.state.stages) {
 	    stage = this.state.stages[i];
-	    stageComponents.push(<Stage stage={stage.name} key={stage.id} />);
+	    stageComponents.push(<Stage stage={stage.name} key={stage.id}  onMouseOver={this.showDelete} />);
 	}
 	
 	return (
