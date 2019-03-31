@@ -5,7 +5,7 @@ import './index.css';
 import Pipeline from './Pipeline'
 import * as serviceWorker from './serviceWorker';
 
-let stages = ['Fetch', 'Decode', 'Execute', 'Memory', 'Write'];
+let stages = [{name: 'Fetch', id: 1}, {name: 'Decode', id: 2}, {name: 'Execute', id: 3}, {name: 'Memory', id: 4}, {name: 'Write', id: 5}];
 
 ReactDOM.render(<Pipeline stages={stages} />, document.getElementById('root'));
 
