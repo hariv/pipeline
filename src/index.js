@@ -5,7 +5,8 @@ import './index.css';
 import Pipeline from './Pipeline'
 import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<Pipeline />, document.getElementById('root'));
+let stages = ['Fetch', 'Decode', 'Execute', 'Memory', 'Write'];
+ReactDOM.render(<Pipeline stages={stages} />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
