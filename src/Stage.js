@@ -4,10 +4,10 @@ import logo from './logo.svg';
 class Stage extends Component {
     render() {
 	return (
-		<div className="stage">
-		<div className="stageName" onMouseOver={this.props.onMouseOver}>{this.props.stage}</div>
+		<span className="stage">
+		<span className="stageName" onMouseOver={this.props.onMouseOver}>{this.props.stage}</span>
 		<button className="stageDelete">X</button>
-		</div>
+		</span>
 		);
     }
 }
