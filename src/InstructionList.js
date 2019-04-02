@@ -9,12 +9,12 @@ class InstructionList extends Component {
     }
     
     render() {
-	let instructionComponent = [], i;
+	let instructionListComponent = [], i;
 	for(i in this.state.instructionList) {
-	    instructionComponent.push(<InstructionItem item={instructionList[i]} key={i}/>);
+	    instructionListComponent.push(<InstructionItem item={instructionList[i]} key={i}/>);
 	}
 	return (<div id="instructionList">
-	    {instructionComponent}
+	    {instructionListComponent}
 		</div>
 		);
     }
