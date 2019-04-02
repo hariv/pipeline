@@ -14,33 +14,34 @@ class Instruction extends Component {
     }
     
     addNewInstruction() {
-        let opcode = document.getElementById("opcodeSelect");
+	let opcode, destination, firstSource, secondSource, instruction, instructionList;
+	
+        opcode = document.getElementById("opcodeSelect");
         opcode = opcode.options[opcode.selectedIndex].value;
 
-        let destination = document.getElementById("destinationSelect");
+        destination = document.getElementById("destinationSelect");
         destination = destination.options[destination.selectedIndex].value;
 
-        let firstSource = document.getElementById("firstSourceSelect");
+        firstSource = document.getElementById("firstSourceSelect");
         firstSource = firstSource.options[firstSource.selectedIndex].value;
 
-        let secondSource = document.getElementById("secondSourceSelect");
+        secondSource = document.getElementById("secondSourceSelect");
         secondSource = secondSource.options[secondSource.selectedIndex].value;
 	
-	let instructionList = JSON.parse(JSON.stringify(this.state.instructions));
+	instructionList = JSON.parse(JSON.stringify(this.state.instructions));
 	
-	let instruction = [{opcode: opcode, destination: destination, firstSource: firstSource, secondSource: secondSource}];
+	instruction = [{opcode: opcode, destination: destination, firstSource: firstSource, secondSource: secondSource}];
 	instructionList = instructionList.concat(instruction);
 	
 	this.setState({instructions: instructionList});
     }
     
     render() { 
-	let instructionListComponent = [], i;
+	let instructionListComponent = [], opcodeOptions = [], destinationOptions = [], firstSourceOptions = [], secondSourceOptions = [], i;
 	for(i in this.state.instructions) {
+	    console.log(this.state.instructions[i]);
 	    instructionListComponent.push(<InstructionItem item={this.state.instructions[i]} key={i}/>);
 	}
-	
-	let opcodeOptions = [], destinationOptions = [], firstSourceOptions = [], secondSourceOptions = [];
 	
 	for(i in this.opcodeList) {
 	    opcodeOptions.push(<option key={i} value={this.opcodeList[i]}>{this.opcodeList[i]}</option>);
