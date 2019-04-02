@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import AddInstruction from './AddInstruction'
-import InstructionList from './InstructionList'
 import InstructionItem from './InstructionItem'
 
 class Instruction extends Component {
