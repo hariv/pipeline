@@ -55,19 +55,26 @@ class Instruction extends Component {
 	
 	this.setState({instructions: instructionList});
     }
-
-    getExecutionSequence() {
-	let numInstructions, instructionMatrix, i, j;
+    
+    isDependent(earlierInstruction, laterInstruction) {
+	return (earlierInstruction.destination === laterInstruction.firstSource || earlierInstruction.destination === laterInstruction.secondSource);
+    }
+    
+    buildInstructionDependencyMatrix() {
+	let numInstructions, instructionDependencyMatrix, i, j;
 	numInstructions = this.state.instructions.length;
-	instructionMatrix = Array(numInstructions).fill().map(() => Array(numInstructions).fill(0));
+	instructionDependencyMatrix = Array(numInstructions).fill().map(() => Array(numInstructions).fill(0));
 	
-	for(i=0;i<numInstructions;i++) {
-	    for(j=i+1;j<numInstructions;j++) {
-		if(this.state.instructions[i].destination == this.state.instructions[j].firstSource || this.state.instructions[i].destination == this.state.instructions[j].secondSource)
-		    instructionMatrix[i][j] = 1;
-	    }
-	}
-	console.log(instructionMatrix);
+	for(i=0;i<numInstructions;i++)
+	    for(j=i+1;j<numInstructions;j++)
+		if(this.isDependent(this.state.instructions[i], this.state.instructions[j]))
+		    instructionDependencyMatrix[i][j] = j-i;
+	
+	return instructionDependencyMatrix;
+    }
+    
+    getExecutionSequence() {
+	let instructionDependencyMatrix = this.buildInstructionDependencyMatrix();
 	return;
     }
     
