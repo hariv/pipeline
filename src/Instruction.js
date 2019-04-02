@@ -11,8 +11,18 @@ class Instruction extends Component {
 	this.opcodeList = ["ADD", "SUB", "MUL", "DIV"];
 	this.registerList = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8"];
 	this.addNewInstruction = this.addNewInstruction.bind(this);
+	this.removeInstruction = this.removeInstruction.bind(this);
     }
     
+    removeInstruction() {
+	let instructionList;
+	instructionList = JSON.parse(JSON.stringify(this.state.instructions));
+	
+	instructionList.pop();
+	
+	this.setState({instructions: instructionList});
+	
+    }
     addNewInstruction() {
 	let opcode, destination, firstSource, secondSource, instruction, instructionList;
 	
@@ -39,7 +49,6 @@ class Instruction extends Component {
     render() { 
 	let instructionListComponent = [], opcodeOptions = [], destinationOptions = [], firstSourceOptions = [], secondSourceOptions = [], i;
 	for(i in this.state.instructions) {
-	    console.log(this.state.instructions[i]);
 	    instructionListComponent.push(<InstructionItem item={this.state.instructions[i]} key={i}/>);
 	}
 	
@@ -72,6 +81,7 @@ class Instruction extends Component {
                     {secondSourceOptions}
                 </select>
 		<button className="addInstruction" onClick={this.addNewInstruction}>Add Instruction</button>
+		<button className="removeInstruction" onClick={this.removeInstruction}>Remove Instruction</button>
 		</div>
 		</div>
 		);
