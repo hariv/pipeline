@@ -13,10 +13,10 @@ class InstructionItem extends Component {
     
     render() {
 	return (<div id="instructionItem">
-		<span class="opcode">{this.opcode}</span>
-		<span class="destination">{this.destinationRegister}</span>
-		<span class="firstSource">{this.firstSourceRegister}</span>
-		<span class="secondSource">{this.secondSourceRegister}</span>
+		<span className="opcode">{this.opcode}</span>
+		<span className="destination">{this.destinationRegister}</span>
+		<span className="firstSource">{this.firstSourceRegister}</span>
+		<span className="secondSource">{this.secondSourceRegister}</span>
 		</div>
 		);
     }
