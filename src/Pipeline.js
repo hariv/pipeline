@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import Stage from './Stage'
-import AddInstruction from './AddInstruction'
+import Instruction from './Instruction'
 
 class Pipeline extends Component {
     
@@ -28,7 +28,7 @@ class Pipeline extends Component {
 		<h3 className="stageHeading">Stages</h3>
 		    {stageComponents}
 		<h3 className="instructionHeading">Add Instruction</h3>
-		<AddInstruction />
+		<Instruction />
 		</header>
 		</div>
 		);

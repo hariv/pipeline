@@ -5,30 +5,15 @@ class AddInstruction extends Component {
     
     constructor(props) {
         super(props);
-        this.state = {instruction: props.instruction, destination: props.destination, firstSource: props.firstSource, secondSource: props.SecondSource};
-	this.instructionList = ["ADD", "SUB", "MUL", "DIV"];
-	this.registerList = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8"];
-    }
-    
-    addNewInstruction() {
-	let instruction = document.getElementById("instructionSelect");
-	instruction = instruction.options[instruction.selectedIndex].value;
-	
-	let destination = document.getElementById("destinationSelect");
-	destination = destination.options[destination.selectedIndex].value;
-	
-	let firstSource = document.getElementById("firstSourceSelect");
-	firstSource = firstSource.options[firstSource.selectedIndex].value;
-	
-	let secondSource = document.getElementById("secondSourceSelect");
-	secondSource = secondSource.options[secondSource.selectedIndex].value;
+	this.opcodeList = props.opcodeList;
+	this.registerList = props.registerList;
     }
     
     render() {
-	let instructionOptions = [], destinationOptions = [], firstSourceOptions = [], secondSourceOptions = [], i;
+	let opcodeOptions = [], destinationOptions = [], firstSourceOptions = [], secondSourceOptions = [], i;
 	
-	for(i in this.instructionList) {
-	    instructionOptions.push(<option key={i} value={this.instructionList[i]}>{this.instructionList[i]}</option>);
+	for(i in this.opcodeList) {
+	    opcodeOptions.push(<option key={i} value={this.opcodeList[i]}>{this.opcodeList[i]}</option>);
 	}
 	
 	for(i in this.registerList) {
@@ -37,11 +22,10 @@ class AddInstruction extends Component {
 	    secondSourceOptions.push(<option key={i} value={this.registerList[i]}>{this.registerList[i]}</option>);
 	}
 	
-	
 	return (
 		<span className="addInstruction">
-		<select id="instructionSelect">
-		    {instructionOptions}
+		<select id="opcodeSelect">
+		    {opcodeOptions}
 		</select>
 		<select id="destinationSelect">
                     {destinationOptions}
@@ -52,7 +36,7 @@ class AddInstruction extends Component {
 		<select id="secondSourceSelect">
                     {secondSourceOptions}
                 </select>
-		<button className="addInstruction" onClick={this.addNewInstruction}>Add Instruction</button>
+		<button className="addInstruction" onClick={this.props.onClick}>Add Instruction</button>
 		</span>
 		);
     }
