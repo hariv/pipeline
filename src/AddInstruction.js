@@ -14,7 +14,6 @@ class AddInstruction extends Component {
 	let instructionOptions = [], destinationOptions = [], firstSourceOptions = [], secondSourceOptions = [], i;
 	
 	for(i in this.instructionList) {
-	    console.log(this.instructionList[i]);
 	    instructionOptions.push(<option key={i} value={this.instructionList[i]}>{this.instructionList[i]}</option>);
 	}
 	
