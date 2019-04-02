@@ -7,11 +7,21 @@ class Instruction extends Component {
     constructor(props) {
         super(props);
         
-	this.state = {instructions: []};
+	this.state = {instructions: [], codeSequence: []};
+	
+	this.state.instructions[0] = {opcode: "ADD", destination: "R4", firstSource: "R2", secondSource: "R3"};
+	this.state.instructions[1] = {opcode: "SUB", destination: "R1", firstSource: "R4", secondSource: "R2"};
+	this.state.instructions[2] = {opcode: "ADD", destination: "R3", firstSource: "R1", secondSource: "R2"};
+	this.state.instructions[3] = {opcode: "SUB", destination: "R3", firstSource: "R3", secondSource: "R8"};
+	this.state.instructions[4] = {opcode: "ADD", destination: "R3", firstSource: "R2", secondSource: "R6"};
+	this.state.instructions[5] = {opcode: "SUB", destination: "R1", firstSource: "R7", secondSource: "R1"};
+	this.state.instructions[6] = {opcode: "ADD", destination: "R1", firstSource: "R4", secondSource: "R7"};
+	
 	this.opcodeList = ["ADD", "SUB", "MUL", "DIV"];
 	this.registerList = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8"];
 	this.addNewInstruction = this.addNewInstruction.bind(this);
 	this.removeInstruction = this.removeInstruction.bind(this);
+	this.getExecutionSequence = this.getExecutionSequence.bind(this);
     }
     
     removeInstruction() {
@@ -21,8 +31,8 @@ class Instruction extends Component {
 	instructionList.pop();
 	
 	this.setState({instructions: instructionList});
-	
     }
+    
     addNewInstruction() {
 	let opcode, destination, firstSource, secondSource, instruction, instructionList;
 	
@@ -44,6 +54,21 @@ class Instruction extends Component {
 	instructionList = instructionList.concat(instruction);
 	
 	this.setState({instructions: instructionList});
+    }
+
+    getExecutionSequence() {
+	let numInstructions, instructionMatrix, i, j;
+	numInstructions = this.state.instructions.length;
+	instructionMatrix = Array(numInstructions).fill().map(() => Array(numInstructions).fill(0));
+	
+	for(i=0;i<numInstructions;i++) {
+	    for(j=i+1;j<numInstructions;j++) {
+		if(this.state.instructions[i].destination == this.state.instructions[j].firstSource || this.state.instructions[i].destination == this.state.instructions[j].secondSource)
+		    instructionMatrix[i][j] = 1;
+	    }
+	}
+	console.log(instructionMatrix);
+	return;
     }
     
     render() { 
@@ -80,8 +105,9 @@ class Instruction extends Component {
 		<select id="secondSourceSelect">
                     {secondSourceOptions}
                 </select>
-		<button className="addInstruction" onClick={this.addNewInstruction}>Add Instruction</button>
-		<button className="removeInstruction" onClick={this.removeInstruction}>Remove Instruction</button>
+		<button id="addInstruction" onClick={this.addNewInstruction}>Add Instruction</button>
+		<button id="removeInstruction" onClick={this.removeInstruction}>Remove Instruction</button>
+		<button id="getExecutionSequence" onClick={this.getExecutionSequence}>Get execution Sequence</button>
 		</div>
 		</div>
 		);
