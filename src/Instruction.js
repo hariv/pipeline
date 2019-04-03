@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import InstructionItem from './InstructionItem'
-
+import SequenceItem from './SequenceItem'
 class Instruction extends Component {
     
     constructor(props) {
@@ -8,13 +8,13 @@ class Instruction extends Component {
         
 	this.state = {instructions: [], codeSequence: [], registerWriteReadGap: 2};
 	
-	this.state.instructions[0] = {opcode: "ADD", destination: "R4", firstSource: "R2", secondSource: "R3"};
+	/*this.state.instructions[0] = {opcode: "ADD", destination: "R4", firstSource: "R2", secondSource: "R3"};
 	this.state.instructions[1] = {opcode: "SUB", destination: "R1", firstSource: "R4", secondSource: "R2"};
 	this.state.instructions[2] = {opcode: "ADD", destination: "R3", firstSource: "R1", secondSource: "R2"};
 	this.state.instructions[3] = {opcode: "SUB", destination: "R3", firstSource: "R3", secondSource: "R8"};
 	this.state.instructions[4] = {opcode: "ADD", destination: "R3", firstSource: "R2", secondSource: "R6"};
 	this.state.instructions[5] = {opcode: "SUB", destination: "R1", firstSource: "R7", secondSource: "R1"};
-	this.state.instructions[6] = {opcode: "ADD", destination: "R1", firstSource: "R4", secondSource: "R7"};
+	this.state.instructions[6] = {opcode: "ADD", destination: "R1", firstSource: "R4", secondSource: "R7"};*/
 	
 	this.opcodeList = ["ADD", "SUB", "MUL", "DIV"];
 	this.registerList = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8"];
@@ -78,17 +78,14 @@ class Instruction extends Component {
 	let instructionDependencyMatrix = this.buildInstructionDependencyMatrix();
 	console.log(instructionDependencyMatrix);
 	this.insertNOPS(instructionDependencyMatrix);
-	return;
     }
     
     insertNOPS(instructionDependencyMatrix) {
 	
-	let executionSequence = [], i, j, earlierInstruction, laterInstruction, k;
+	let executionSequence = [], i, j, k;
 	for(i=0;i<this.state.instructions.length;i++) {
-	    earlierInstruction = this.state.instructions[i];
-	    executionSequence.push(earlierInstruction);
+	    executionSequence.push(this.state.instructions[i]);
 	    for(j=i+1;j<this.state.instructions.length;j++) {
-		laterInstruction = this.state.instructions[j];
 		if(instructionDependencyMatrix[i][j]) {
 		    for(k=0;k<this.state.registerWriteReadGap-(j-i)+1;k++) {
 			executionSequence.push("NOPS");
@@ -97,11 +94,11 @@ class Instruction extends Component {
 		}
 	    } 
 	}
-	console.log(executionSequence);
+	this.setState({codeSequence: executionSequence});
     }
     
     render() { 
-	let instructionListComponent = [], opcodeOptions = [], destinationOptions = [], firstSourceOptions = [], secondSourceOptions = [], i;
+	let instructionListComponent = [], opcodeOptions = [], destinationOptions = [], firstSourceOptions = [], secondSourceOptions = [], codeSequenceComponent = [], i;
 	for(i in this.state.instructions) {
 	    instructionListComponent.push(<InstructionItem item={this.state.instructions[i]} key={i}/>);
 	}
@@ -116,11 +113,21 @@ class Instruction extends Component {
 	    secondSourceOptions.push(<option key={i} value={this.registerList[i]}>{this.registerList[i]}</option>);
 	}
 	
+	for(i in this.state.codeSequence) {
+	    codeSequenceComponent.push(<SequenceItem item={this.state.codeSequence[i]} key={i} />);
+	}
+	
 	return (
 		<div>
 		<div id="instructionList">
+		<h3 id="instructionHeader">Instruction List</h3>
 		    {instructionListComponent}
 		</div>
+		<div id="codeSequence">
+		    {this.state.codeSequence.length > 0 &&
+			<h3 id="codeSequenceHeader">Code Sequence</h3>}
+                    {codeSequenceComponent}
+                </div>
 		<div className="addInstruction">
 		<select id="opcodeSelect">
 		    {opcodeOptions}
