@@ -7,7 +7,7 @@ class Instruction extends Component {
     constructor(props) {
         super(props);
         
-	this.state = {instructions: [], codeSequence: []};
+	this.state = {instructions: [], codeSequence: [], registerWriteReadGap: 2};
 	
 	this.state.instructions[0] = {opcode: "ADD", destination: "R4", firstSource: "R2", secondSource: "R3"};
 	this.state.instructions[1] = {opcode: "SUB", destination: "R1", firstSource: "R4", secondSource: "R2"};
@@ -67,15 +67,38 @@ class Instruction extends Component {
 	
 	for(i=0;i<numInstructions;i++)
 	    for(j=i+1;j<numInstructions;j++)
-		if(this.isDependent(this.state.instructions[i], this.state.instructions[j]))
-		    instructionDependencyMatrix[i][j] = j-i;
+		if(this.isDependent(this.state.instructions[i], this.state.instructions[j])) {
+		    instructionDependencyMatrix[i][j] = 1;
+		    break;
+		}
 	
 	return instructionDependencyMatrix;
     }
     
     getExecutionSequence() {
 	let instructionDependencyMatrix = this.buildInstructionDependencyMatrix();
+	console.log(instructionDependencyMatrix);
+	this.insertNOPS(instructionDependencyMatrix);
 	return;
+    }
+    
+    insertNOPS(instructionDependencyMatrix) {
+	
+	let executionSequence = [], i, j, earlierInstruction, laterInstruction, k;
+	for(i=0;i<this.state.instructions.length;i++) {
+	    earlierInstruction = this.state.instructions[i];
+	    executionSequence.push(earlierInstruction);
+	    for(j=i+1;j<this.state.instructions.length;j++) {
+		laterInstruction = this.state.instructions[j];
+		if(instructionDependencyMatrix[i][j]) {
+		    for(k=0;k<this.state.registerWriteReadGap-(j-i)+1;k++) {
+			executionSequence.push("NOPS");
+		    }
+		    break;
+		}
+	    } 
+	}
+	console.log(executionSequence);
     }
     
     render() { 
