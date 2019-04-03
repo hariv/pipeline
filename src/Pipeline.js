@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import Stage from './Stage'
 import Instruction from './Instruction'
 
@@ -13,6 +12,7 @@ class Pipeline extends Component {
     showDelete() {
 	console.log("HELLO");
     }
+    
     render() {
 	let stageComponents = [], stage;
 	
