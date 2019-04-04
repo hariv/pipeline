@@ -16,7 +16,14 @@ class Instruction extends Component {
 	this.state.instructions[5] = {opcode: "SUB", destination: "R1", firstSource: "R7", secondSource: "R1"};
 	this.state.instructions[6] = {opcode: "ADD", destination: "R1", firstSource: "R4", secondSource: "R7"};*/
 	
-	this.opcodeList = ["ADD", "SUB", "MUL", "DIV"];
+	//this.opcodeList = ["ADD", "SUB", "MUL", "DIV"];
+	this.opcodeList = [{name: "ADD", type: "ALU"}, 
+			   {name: "SUB", type: "ALU"}, 
+			   {name: "MUL", type: "ALU"}, 
+			   {name: "DIV", type: "ALU"},
+			   {name: "LW", type: "MEM"},
+			   {name: "SW", type: "MEM"}];
+	
 	this.registerList = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8"];
 	this.addNewInstruction = this.addNewInstruction.bind(this);
 	this.removeInstruction = this.removeInstruction.bind(this);
@@ -36,7 +43,8 @@ class Instruction extends Component {
 	let opcode, destination, firstSource, secondSource, instruction, instructionList;
 	
         opcode = document.getElementById("opcodeSelect");
-        opcode = opcode.options[opcode.selectedIndex].value;
+        opcode = JSON.parse(opcode.options[opcode.selectedIndex].value);
+	opcode = opcode.name;
 
         destination = document.getElementById("destinationSelect");
         destination = destination.options[destination.selectedIndex].value;
@@ -76,7 +84,6 @@ class Instruction extends Component {
     
     getExecutionSequence() {
 	let instructionDependencyMatrix = this.buildInstructionDependencyMatrix();
-	console.log(instructionDependencyMatrix);
 	this.insertNOPS(instructionDependencyMatrix);
     }
     
@@ -104,7 +111,7 @@ class Instruction extends Component {
 	}
 	
 	for(i in this.opcodeList) {
-	    opcodeOptions.push(<option key={i} value={this.opcodeList[i]}>{this.opcodeList[i]}</option>);
+	    opcodeOptions.push(<option key={i} value={JSON.stringify(this.opcodeList[i])}>{this.opcodeList[i].name}</option>);
 	}
 	
 	for(i in this.registerList) {
