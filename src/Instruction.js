@@ -6,7 +6,7 @@ class Instruction extends Component {
     constructor(props) {
         super(props);
         
-	this.state = {instructions: [], codeSequence: [], registerWriteReadGap: 2};
+	this.state = {instructions: [], codeSequence: [], registerWriteReadGap: 2, isMemory: false};
 	
 	/*this.state.instructions[0] = {opcode: "ADD", destination: "R4", firstSource: "R2", secondSource: "R3"};
 	this.state.instructions[1] = {opcode: "SUB", destination: "R1", firstSource: "R4", secondSource: "R2"};
@@ -16,7 +16,6 @@ class Instruction extends Component {
 	this.state.instructions[5] = {opcode: "SUB", destination: "R1", firstSource: "R7", secondSource: "R1"};
 	this.state.instructions[6] = {opcode: "ADD", destination: "R1", firstSource: "R4", secondSource: "R7"};*/
 	
-	//this.opcodeList = ["ADD", "SUB", "MUL", "DIV"];
 	this.opcodeList = [{name: "ADD", type: "ALU"}, 
 			   {name: "SUB", type: "ALU"}, 
 			   {name: "MUL", type: "ALU"}, 
@@ -28,6 +27,7 @@ class Instruction extends Component {
 	this.addNewInstruction = this.addNewInstruction.bind(this);
 	this.removeInstruction = this.removeInstruction.bind(this);
 	this.getExecutionSequence = this.getExecutionSequence.bind(this);
+	this.change = this.change.bind(this);
     }
     
     removeInstruction() {
@@ -43,8 +43,7 @@ class Instruction extends Component {
 	let opcode, destination, firstSource, secondSource, instruction, instructionList;
 	
         opcode = document.getElementById("opcodeSelect");
-        opcode = JSON.parse(opcode.options[opcode.selectedIndex].value);
-	opcode = opcode.name;
+	opcode = JSON.parse(opcode.options[opcode.selectedIndex].value);
 
         destination = document.getElementById("destinationSelect");
         destination = destination.options[destination.selectedIndex].value;
@@ -104,6 +103,17 @@ class Instruction extends Component {
 	this.setState({codeSequence: executionSequence});
     }
     
+    change() {
+	let opcode;
+	opcode = document.getElementById("opcodeSelect");
+        opcode = JSON.parse(opcode.options[opcode.selectedIndex].value);
+	
+	if(opcode.type === "MEM")
+	    this.setState({isMemory: true});
+	else
+	    this.setState({isMemory: false});
+    }
+    
     render() { 
 	let instructionListComponent = [], opcodeOptions = [], destinationOptions = [], firstSourceOptions = [], secondSourceOptions = [], codeSequenceComponent = [], i;
 	for(i in this.state.instructions) {
@@ -136,14 +146,14 @@ class Instruction extends Component {
                     {codeSequenceComponent}
                 </div>
 		<div className="addInstruction">
-		<select id="opcodeSelect">
+		<select id="opcodeSelect" onChange={this.change}>
 		    {opcodeOptions}
 		</select>
 		<select id="destinationSelect">
                     {destinationOptions}
                 </select>
 		<select id="firstSourceSelect">
-                    {firstSourceOptions}
+		    {this.state.isMemory ? <option>Offset</option> : firstSourceOptions}
                 </select>
 		<select id="secondSourceSelect">
                     {secondSourceOptions}

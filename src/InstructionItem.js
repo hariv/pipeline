@@ -4,7 +4,7 @@ class InstructionItem extends Component {
     
     constructor(props) {
         super(props);
-	this.opcode = props.item.opcode;
+	this.opcode = props.item.opcode.name;
 	this.destination = props.item.destination;
 	this.firstSource = props.item.firstSource;
 	this.secondSource = props.item.secondSource;
