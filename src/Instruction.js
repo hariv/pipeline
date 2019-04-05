@@ -6,9 +6,10 @@ class Instruction extends Component {
     constructor(props) {
         super(props);
         
-	this.state = {instructions: [], codeSequence: [], registerWriteReadGap: 2};
+	this.state = {instructions: [], codeSequence: []};
 	
 	this.forwardingSupport = props.forwardingSupport;
+	this.registerWriteReadGap = props.registerWriteReadGap;
 	
 	/*this.state.instructions[0] = {opcode: "ADD", destination: "R4", firstSource: "R2", secondSource: "R3"};
 	this.state.instructions[1] = {opcode: "SUB", destination: "R1", firstSource: "R4", secondSource: "R2"};
@@ -107,7 +108,7 @@ class Instruction extends Component {
 	    executionSequence.push(this.state.instructions[i]);
 	    for(j=i+1;j<this.state.instructions.length;j++) {
 		if(instructionDependencyMatrix[i][j]) {
-		    for(k=0;k<this.state.registerWriteReadGap-(j-i)+1;k++) {
+		    for(k=0;k<this.registerWriteReadGap-(j-i)+1;k++) {
 			executionSequence.push("NOPS");
 		    }
 		    break;

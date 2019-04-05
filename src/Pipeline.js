@@ -10,21 +10,19 @@ class Pipeline extends Component {
 	this.toggleForwardingSupport = this.toggleForwardingSupport.bind(this);
     }
     
-    showDelete() {
-	console.log("HELLO");
-    }
-    
     toggleForwardingSupport() {
 	this.setState({forwardingSupport: !this.state.forwardingSupport});
     }
     
     render() {
-	let stageComponents = [], stage;
+	let stageComponents = [], stage, registerWriteReadGap;
 	
 	for(let i in this.state.stages) {
 	    stage = this.state.stages[i];
-	    stageComponents.push(<Stage stage={stage.name} key={stage.id}  onMouseOver={this.showDelete} />);
+	    stageComponents.push(<Stage stage={stage} key={i} />);
 	}
+	
+	registerWriteReadGap = this.state.stages.indexOf("Write") - this.state.stages.indexOf("Decode") - 1;
 	
 	return (
 		<div className="Pipeline">
@@ -35,7 +33,7 @@ class Pipeline extends Component {
 		<br />
 		Support forwarding: <input type="checkbox" onClick={this.toggleForwardingSupport}/> 
 		<h3 className="instructionHeading">Add Instruction</h3>
-		<Instruction forwardingSupport={this.state.forwardingSupport} />
+		<Instruction forwardingSupport={this.state.forwardingSupport} registerWriteReadGap={registerWriteReadGap} />
 		</header>
 		</div>
 		);
