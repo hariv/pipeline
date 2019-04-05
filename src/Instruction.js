@@ -6,7 +6,7 @@ class Instruction extends Component {
     constructor(props) {
         super(props);
         
-	this.state = {instructions: [], codeSequence: [], registerWriteReadGap: 2, isMemory: false};
+	this.state = {instructions: [], codeSequence: [], registerWriteReadGap: 2};
 	
 	/*this.state.instructions[0] = {opcode: "ADD", destination: "R4", firstSource: "R2", secondSource: "R3"};
 	this.state.instructions[1] = {opcode: "SUB", destination: "R1", firstSource: "R4", secondSource: "R2"};
@@ -40,19 +40,31 @@ class Instruction extends Component {
     }
     
     addNewInstruction() {
-	let opcode, destination, firstSource, secondSource, instruction, instructionList;
+	let opcode, destination, firstSource, secondSource, instruction, instructionList, firstReg, secondReg, thirdReg;
 	
         opcode = document.getElementById("opcodeSelect");
 	opcode = JSON.parse(opcode.options[opcode.selectedIndex].value);
 
-        destination = document.getElementById("destinationSelect");
-        destination = destination.options[destination.selectedIndex].value;
+        firstReg = document.getElementById("firstRegisterSelect");
+        firstReg = firstReg.options[firstReg.selectedIndex].value;
 
-        firstSource = document.getElementById("firstSourceSelect");
-        firstSource = firstSource.options[firstSource.selectedIndex].value;
+        secondReg = document.getElementById("secondRegisterSelect");
+        secondReg = secondReg.options[secondReg.selectedIndex].value;
 
-        secondSource = document.getElementById("secondSourceSelect");
-        secondSource = secondSource.options[secondSource.selectedIndex].value;
+        thirdReg = document.getElementById("thirdRegisterSelect");
+        thirdReg = thirdReg.options[thirdReg.selectedIndex].value;
+	
+	destination = firstReg;
+	firstSource = secondReg;
+	secondSource = thirdReg;
+	
+	if(opcode.name === "SW") {
+	    firstSource = firstReg;
+	    destination = undefined;
+	}
+	
+	if(opcode.name === "LW")
+	    firstSource = undefined;
 	
 	instructionList = JSON.parse(JSON.stringify(this.state.instructions));
 	
@@ -108,10 +120,12 @@ class Instruction extends Component {
 	opcode = document.getElementById("opcodeSelect");
         opcode = JSON.parse(opcode.options[opcode.selectedIndex].value);
 	
-	if(opcode.type === "MEM")
-	    this.setState({isMemory: true});
+	if(opcode.name === "LW")
+	    this.setState({memory: "load"});
+	else if(opcode.name === "SW")
+	    this.setState({memory: "store"});
 	else
-	    this.setState({isMemory: false});
+	    this.setState({memory: undefined});
     }
     
     render() { 
@@ -149,13 +163,13 @@ class Instruction extends Component {
 		<select id="opcodeSelect" onChange={this.change}>
 		    {opcodeOptions}
 		</select>
-		<select id="destinationSelect">
+		<select id="firstRegisterSelect">
                     {destinationOptions}
                 </select>
-		<select id="firstSourceSelect">
-		    {this.state.isMemory ? <option>Offset</option> : firstSourceOptions}
+		<select id="secondRegisterSelect">
+		    {this.state.memory ? <option>Offset</option> : firstSourceOptions}
                 </select>
-		<select id="secondSourceSelect">
+		<select id="thirdRegisterSelect">
                     {secondSourceOptions}
                 </select>
 		<button id="addInstruction" onClick={this.addNewInstruction}>Add Instruction</button>
