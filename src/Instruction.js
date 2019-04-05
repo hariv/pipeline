@@ -8,6 +8,8 @@ class Instruction extends Component {
         
 	this.state = {instructions: [], codeSequence: [], registerWriteReadGap: 2};
 	
+	this.forwardingSupport = props.forwardingSupport;
+	
 	/*this.state.instructions[0] = {opcode: "ADD", destination: "R4", firstSource: "R2", secondSource: "R3"};
 	this.state.instructions[1] = {opcode: "SUB", destination: "R1", firstSource: "R4", secondSource: "R2"};
 	this.state.instructions[2] = {opcode: "ADD", destination: "R3", firstSource: "R1", secondSource: "R2"};
