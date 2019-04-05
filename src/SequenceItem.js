@@ -14,7 +14,7 @@ class SequenceItem extends Component {
 	
 	if(this.opcode) {
 	    return (<div className="codeSequenceItem">
-		    <span className="opcode">{this.opcode}</span>
+		    <span className="opcode">{this.opcode.name}</span>
 		    <span className="destination">{this.destination}</span>
 		    <span className="firstSource">{this.firstSource}</span>
 		    <span className="secondSource">{this.secondSource}</span>
