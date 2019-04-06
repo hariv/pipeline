@@ -6,17 +6,10 @@ class Instruction extends Component {
     constructor(props) {
         super(props);
         
-	this.state = {instructions: [], codeSequence: [], forwardingSupport: false};
+	this.state = {instructions: [], codeSequence: []};
 	
 	this.registerWriteReadGap = props.registerWriteReadGap;
-
-	/*this.state.instructions[0] = {opcode: "ADD", destination: "R4", firstSource: "R2", secondSource: "R3"};
-	this.state.instructions[1] = {opcode: "SUB", destination: "R1", firstSource: "R4", secondSource: "R2"};
-	this.state.instructions[2] = {opcode: "ADD", destination: "R3", firstSource: "R1", secondSource: "R2"};
-	this.state.instructions[3] = {opcode: "SUB", destination: "R3", firstSource: "R3", secondSource: "R8"};
-	this.state.instructions[4] = {opcode: "ADD", destination: "R3", firstSource: "R2", secondSource: "R6"};
-	this.state.instructions[5] = {opcode: "SUB", destination: "R1", firstSource: "R7", secondSource: "R1"};
-	this.state.instructions[6] = {opcode: "ADD", destination: "R1", firstSource: "R4", secondSource: "R7"};*/
+	this.forwardingSupport = false;
 	
 	this.opcodeList = [{name: "ADD", type: "ALU"}, 
 			   {name: "SUB", type: "ALU"}, 
@@ -46,7 +39,8 @@ class Instruction extends Component {
     }
     
     toggleForwardingSupport() {
-        this.setState({forwardingSupport: !this.state.forwardingSupport});
+	this.forwardingSupport = !this.forwardingSupport;
+	this.getExecutionSequence();
     }
     
     addNewInstruction() {
@@ -119,9 +113,9 @@ class Instruction extends Component {
 		laterInstruction = this.state.instructions[j];
 		if(instructionDependencyMatrix[i][j]) {
 		    numNops = this.registerWriteReadGap-(j-i)+1;
-		    if(earlierInstruction.opcode.type === "ALU" && this.state.forwardingSupport)
+		    if(earlierInstruction.opcode.type === "ALU" && this.forwardingSupport)
 			numNops -= 2;
-		    else if(earlierInstruction.opcode.type === "MEM" && laterInstruction.opcode.type === "ALU" && this.state.forwardingSupport)
+		    else if(earlierInstruction.opcode.type === "MEM" && laterInstruction.opcode.type === "ALU" && this.forwardingSupport)
 			numNops--;
 		    for(k=0;k<numNops;k++)
 			executionSequence.push("NOPS");

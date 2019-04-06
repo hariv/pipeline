@@ -4,20 +4,16 @@ class SequenceItem extends Component {
     
     constructor(props) {
         super(props);
-	this.opcode = props.item.opcode;
-	this.destination = props.item.destination;
-	this.firstSource = props.item.firstSource;
-	this.secondSource = props.item.secondSource;
+	this.item = props.item;
     }
     
     render() {
-	
-	if(this.opcode) {
+	if(this.item.opcode) {
 	    return (<div className="codeSequenceItem">
-		    <span className="opcode">{this.opcode.name}</span>
-		    <span className="destination">{this.destination}</span>
-		    <span className="firstSource">{this.firstSource}</span>
-		    <span className="secondSource">{this.secondSource}</span>
+		    <span className="opcode">{this.item.opcode.name}</span>
+		    <span className="destination">{this.item.destination}</span>
+		    <span className="firstSource">{this.item.firstSource}</span>
+		    <span className="secondSource">{this.item.secondSource}</span>
 		    </div>
 		    );
 	}
