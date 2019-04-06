@@ -10,7 +10,7 @@ class Instruction extends Component {
 	
 	this.forwardingSupport = props.forwardingSupport;
 	this.registerWriteReadGap = props.registerWriteReadGap;
-	
+
 	/*this.state.instructions[0] = {opcode: "ADD", destination: "R4", firstSource: "R2", secondSource: "R3"};
 	this.state.instructions[1] = {opcode: "SUB", destination: "R1", firstSource: "R4", secondSource: "R2"};
 	this.state.instructions[2] = {opcode: "ADD", destination: "R3", firstSource: "R1", secondSource: "R2"};
@@ -23,10 +23,13 @@ class Instruction extends Component {
 			   {name: "SUB", type: "ALU"}, 
 			   {name: "MUL", type: "ALU"}, 
 			   {name: "DIV", type: "ALU"},
+			   {name: "AND", type: "ALU"},
+			   {name: "OR", type: "ALU"},
+			   {name: "XOR", type: "ALU"},
 			   {name: "LW", type: "MEM"},
 			   {name: "SW", type: "MEM"}];
 	
-	this.registerList = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8"];
+	this.registerList = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10", "R11", "R12", "R13", "R14", "R15", "R16"];
 	this.addNewInstruction = this.addNewInstruction.bind(this);
 	this.removeInstruction = this.removeInstruction.bind(this);
 	this.getExecutionSequence = this.getExecutionSequence.bind(this);
@@ -98,19 +101,27 @@ class Instruction extends Component {
     
     getExecutionSequence() {
 	let instructionDependencyMatrix = this.buildInstructionDependencyMatrix();
+	this.forwardingSupport = true;
 	this.insertNOPS(instructionDependencyMatrix);
     }
     
     insertNOPS(instructionDependencyMatrix) {
 	
-	let executionSequence = [], i, j, k;
+	let executionSequence = [], i, j, k, earlierInstruction, laterInstruction, numNops;
+	
 	for(i=0;i<this.state.instructions.length;i++) {
-	    executionSequence.push(this.state.instructions[i]);
+	    earlierInstruction = this.state.instructions[i];
+	    executionSequence.push(this.state.instructions[i]);	    
 	    for(j=i+1;j<this.state.instructions.length;j++) {
+		laterInstruction = this.state.instructions[j];
 		if(instructionDependencyMatrix[i][j]) {
-		    for(k=0;k<this.registerWriteReadGap-(j-i)+1;k++) {
+		    numNops = this.registerWriteReadGap-(j-i)+1;
+		    if(earlierInstruction.opcode.type === "ALU" && this.forwardingSupport)
+			numNops -= 2;
+		    else if(earlierInstruction.opcode.type === "MEM" && laterInstruction.opcode.type === "ALU" && this.forwardingSupport)
+			numNops--;
+		    for(k=0;k<numNops;k++)
 			executionSequence.push("NOPS");
-		    }
 		    break;
 		}
 	    } 
