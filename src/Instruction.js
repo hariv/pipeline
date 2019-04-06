@@ -6,9 +6,8 @@ class Instruction extends Component {
     constructor(props) {
         super(props);
         
-	this.state = {instructions: [], codeSequence: []};
+	this.state = {instructions: [], codeSequence: [], forwardingSupport: false};
 	
-	this.forwardingSupport = props.forwardingSupport;
 	this.registerWriteReadGap = props.registerWriteReadGap;
 
 	/*this.state.instructions[0] = {opcode: "ADD", destination: "R4", firstSource: "R2", secondSource: "R3"};
@@ -34,6 +33,7 @@ class Instruction extends Component {
 	this.removeInstruction = this.removeInstruction.bind(this);
 	this.getExecutionSequence = this.getExecutionSequence.bind(this);
 	this.change = this.change.bind(this);
+	this.toggleForwardingSupport = this.toggleForwardingSupport.bind(this);
     }
     
     removeInstruction() {
@@ -43,6 +43,10 @@ class Instruction extends Component {
 	instructionList.pop();
 	
 	this.setState({instructions: instructionList});
+    }
+    
+    toggleForwardingSupport() {
+        this.setState({forwardingSupport: !this.state.forwardingSupport});
     }
     
     addNewInstruction() {
@@ -101,7 +105,6 @@ class Instruction extends Component {
     
     getExecutionSequence() {
 	let instructionDependencyMatrix = this.buildInstructionDependencyMatrix();
-	this.forwardingSupport = true;
 	this.insertNOPS(instructionDependencyMatrix);
     }
     
@@ -116,9 +119,9 @@ class Instruction extends Component {
 		laterInstruction = this.state.instructions[j];
 		if(instructionDependencyMatrix[i][j]) {
 		    numNops = this.registerWriteReadGap-(j-i)+1;
-		    if(earlierInstruction.opcode.type === "ALU" && this.forwardingSupport)
+		    if(earlierInstruction.opcode.type === "ALU" && this.state.forwardingSupport)
 			numNops -= 2;
-		    else if(earlierInstruction.opcode.type === "MEM" && laterInstruction.opcode.type === "ALU" && this.forwardingSupport)
+		    else if(earlierInstruction.opcode.type === "MEM" && laterInstruction.opcode.type === "ALU" && this.state.forwardingSupport)
 			numNops--;
 		    for(k=0;k<numNops;k++)
 			executionSequence.push("NOPS");
@@ -164,6 +167,7 @@ class Instruction extends Component {
 	
 	return (
 		<div>
+		Support forwarding: <input type="checkbox" onClick={this.toggleForwardingSupport}/>
 		<div id="instructionList">
 		<h3 id="instructionHeader">Instruction List</h3>
 		    {instructionListComponent}
