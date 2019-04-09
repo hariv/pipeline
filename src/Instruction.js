@@ -82,46 +82,43 @@ class Instruction extends Component {
 	return (earlierInstruction.destination === laterInstruction.firstSource || earlierInstruction.destination === laterInstruction.secondSource);
     }
     
-    buildInstructionDependencyMatrix() {
-	let numInstructions, instructionDependencyMatrix, i, j;
+    buildInstructionDependencyList() {
+	let numInstructions, instructionDependencyList = [], i, j;
 	numInstructions = this.state.instructions.length;
-	instructionDependencyMatrix = Array(numInstructions).fill().map(() => Array(numInstructions).fill(0));
-	
 	for(i=0;i<numInstructions;i++)
 	    for(j=i+1;j<numInstructions;j++)
 		if(this.isDependent(this.state.instructions[i], this.state.instructions[j])) {
-		    instructionDependencyMatrix[i][j] = 1;
+		    instructionDependencyList[i] = j;
 		    break;
 		}
-	
-	return instructionDependencyMatrix;
+	return instructionDependencyList;
     }
+    
     
     getExecutionSequence() {
-	let instructionDependencyMatrix = this.buildInstructionDependencyMatrix();
-	this.insertNOPS(instructionDependencyMatrix);
+	let instructionDependencyList = this.buildInstructionDependencyList();
+	this.insertNOPS(instructionDependencyList);
     }
     
-    insertNOPS(instructionDependencyMatrix) {
+    insertNOPS(instructionDependencyList) {
 	
-	let executionSequence = [], i, j, k, earlierInstruction, laterInstruction, numNops;
+	let executionSequence = [], i, j, k, earlierInstruction, laterInstruction, numNops = 0;
 	
 	for(i=0;i<this.state.instructions.length;i++) {
 	    earlierInstruction = this.state.instructions[i];
-	    executionSequence.push(this.state.instructions[i]);	    
-	    for(j=i+1;j<this.state.instructions.length;j++) {
+	    console.log(earlierInstruction);
+	    executionSequence.push(this.state.instructions[i]);
+	    if(instructionDependencyList[i]) {
+		j = instructionDependencyList[i];
 		laterInstruction = this.state.instructions[j];
-		if(instructionDependencyMatrix[i][j]) {
-		    numNops = this.registerWriteReadGap-(j-i)+1;
-		    if(earlierInstruction.opcode.type === "ALU" && this.forwardingSupport)
-			numNops -= 2;
-		    else if(earlierInstruction.opcode.type === "MEM" && laterInstruction.opcode.type === "ALU" && this.forwardingSupport)
-			numNops--;
-		    for(k=0;k<numNops;k++)
-			executionSequence.push("NOPS");
-		    break;
-		}
-	    } 
+		numNops = this.registerWriteReadGap-(j-i)+1;
+		if(earlierInstruction.opcode.type === "ALU" && this.forwardingSupport)
+		    numNops -= 2;
+		else if(earlierInstruction.opcode.type === "MEM" && laterInstruction.opcode.type === "ALU" && this.forwardingSupport)
+		    numNops--;
+		for(k=0;k<numNops;k++)
+		    executionSequence.push("NOPS");
+	    }
 	}
 	this.setState({codeSequence: executionSequence});
     }
