@@ -9,7 +9,7 @@ class Instruction extends Component {
 	this.state = {instructions: [], codeSequence: []};
 	
 	this.registerWriteReadGap = props.registerWriteReadGap;
-	this.forwardingSupport = false;
+	this.forwardingSupport = props.forwardingSupport;;
 	
 	this.opcodeList = [{name: "ADD", type: "ALU"}, 
 			   {name: "SUB", type: "ALU"}, 
@@ -26,7 +26,6 @@ class Instruction extends Component {
 	this.removeInstruction = this.removeInstruction.bind(this);
 	this.getExecutionSequence = this.getExecutionSequence.bind(this);
 	this.change = this.change.bind(this);
-	this.toggleForwardingSupport = this.toggleForwardingSupport.bind(this);
     }
     
     removeInstruction() {
@@ -38,14 +37,8 @@ class Instruction extends Component {
 	this.setState({instructions: instructionList});
     }
     
-    toggleForwardingSupport() {
-	this.forwardingSupport = !this.forwardingSupport;
-	this.getExecutionSequence();
-    }
-    
     addNewInstruction() {
 	let opcode, destination, firstSource, secondSource, instruction, instructionList, firstReg, secondReg, thirdReg;
-	
         opcode = document.getElementById("opcodeSelect");
 	opcode = JSON.parse(opcode.options[opcode.selectedIndex].value);
 
@@ -107,7 +100,6 @@ class Instruction extends Component {
 	
 	for(i=0;i<this.state.instructions.length;i++) {
 	    earlierInstruction = this.state.instructions[i];
-	    console.log(earlierInstruction);
 	    executionSequence.push(this.state.instructions[i]);
 	    if(instructionDependencyList[i]) {
 		j = instructionDependencyList[i];
@@ -138,8 +130,14 @@ class Instruction extends Component {
 	    this.setState({memory: undefined});
     }
     
-    render() { 
+    componentWillReceiveProps(props) {
+	this.forwardingSupport = props.forwardingSupport;
+	this.getExecutionSequence();
+    }
+
+    render() {
 	let instructionListComponent = [], opcodeOptions = [], destinationOptions = [], firstSourceOptions = [], secondSourceOptions = [], codeSequenceComponent = [], i;
+		
 	for(i in this.state.instructions) {
 	    instructionListComponent.push(<InstructionItem item={this.state.instructions[i]} key={i}/>);
 	}
@@ -158,9 +156,9 @@ class Instruction extends Component {
 	    codeSequenceComponent.push(<SequenceItem item={this.state.codeSequence[i]} key={i} />);
 	}
 	
+	
 	return (
 		<div>
-		Support forwarding: <input type="checkbox" onClick={this.toggleForwardingSupport}/>
 		<div id="instructionList">
 		<h3 id="instructionHeader">Instruction List</h3>
 		    {instructionListComponent}

@@ -6,7 +6,12 @@ class Pipeline extends Component {
     
     constructor(props) {
 	super(props);
-	this.state = {stages: props.stages};
+	this.state = {stages: props.stages, forwardingSupport: false};
+	this.toggleForwardingSupport = this.toggleForwardingSupport.bind(this);
+    }
+    
+    toggleForwardingSupport() {
+	this.setState({forwardingSupport: !this.state.forwardingSupport});
     }
     
     render() {
@@ -26,6 +31,7 @@ class Pipeline extends Component {
 		<h3 className="stageHeading">Stages</h3>
 		    {stageComponents}
 		<br /> 
+		Support forwarding: <input type="checkbox" onClick={this.toggleForwardingSupport} />
 		<Instruction forwardingSupport={this.state.forwardingSupport} registerWriteReadGap={registerWriteReadGap} />
 		</header>
 		</div>

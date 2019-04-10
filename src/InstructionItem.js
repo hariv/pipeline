@@ -1,21 +1,12 @@
 import React, { Component } from 'react';
 
 class InstructionItem extends Component {
-    
-    constructor(props) {
-        super(props);
-	this.opcode = props.item.opcode.name;
-	this.destination = props.item.destination;
-	this.firstSource = props.item.firstSource;
-	this.secondSource = props.item.secondSource;
-    }
-    
     render() {
 	return (<div id="instructionItem">
-		<span className="opcode">{this.opcode}</span>
-		<span className="destination">{this.destination}</span>
-		<span className="firstSource">{this.firstSource}</span>
-		<span className="secondSource">{this.secondSource}</span>
+		<span className="opcode">{this.props.item.opcode.name}</span>
+		<span className="destination">{this.props.item.destination}</span>
+		<span className="firstSource">{this.props.item.firstSource}</span>
+		<span className="secondSource">{this.props.item.secondSource}</span>
 		</div>
 		);
     }
