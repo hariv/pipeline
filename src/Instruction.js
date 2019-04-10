@@ -9,7 +9,8 @@ class Instruction extends Component {
 	this.state = {instructions: [], codeSequence: []};
 	
 	this.registerWriteReadGap = props.registerWriteReadGap;
-	this.forwardingSupport = props.forwardingSupport;;
+	this.forwardingSupport = props.forwardingSupport;
+	this.compilerSupport = props.compilerSupport;
 	
 	this.opcodeList = [{name: "ADD", type: "ALU"}, 
 			   {name: "SUB", type: "ALU"}, 
@@ -94,6 +95,11 @@ class Instruction extends Component {
 	this.insertNOPS(instructionDependencyList);
     }
     
+    scheduleCode(executionSequence, instructionDependencyList) {
+	console.log(instructionDependencyList);
+	console.log(executionSequence);
+    }
+    
     insertNOPS(instructionDependencyList) {
 	
 	let executionSequence = [], i, j, k, earlierInstruction, laterInstruction, numNops = 0;
@@ -113,6 +119,8 @@ class Instruction extends Component {
 		    executionSequence.push("NOPS");
 	    }
 	}
+	if(this.compilerSupport)
+	    this.scheduleCode(executionSequence, instructionDependencyList);
 	this.setState({codeSequence: executionSequence});
 	
     }
@@ -132,6 +140,7 @@ class Instruction extends Component {
     
     componentWillReceiveProps(props) {
 	this.forwardingSupport = props.forwardingSupport;
+	this.compilerSupport = props.compilerSupport;
 	this.getExecutionSequence();
     }
 

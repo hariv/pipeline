@@ -6,12 +6,17 @@ class Pipeline extends Component {
     
     constructor(props) {
 	super(props);
-	this.state = {stages: props.stages, forwardingSupport: false};
+	this.state = {stages: props.stages, forwardingSupport: false, compilerSupport: false};
 	this.toggleForwardingSupport = this.toggleForwardingSupport.bind(this);
+	this.toggleCompilerSupport = this.toggleCompilerSupport.bind(this);
     }
     
     toggleForwardingSupport() {
 	this.setState({forwardingSupport: !this.state.forwardingSupport});
+    }
+    
+    toggleCompilerSupport() {
+	this.setState({compilerSupport: !this.state.compilerSupport});
     }
     
     render() {
@@ -31,8 +36,9 @@ class Pipeline extends Component {
 		<h3 className="stageHeading">Stages</h3>
 		    {stageComponents}
 		<br /> 
-		Support forwarding: <input type="checkbox" onClick={this.toggleForwardingSupport} />
-		<Instruction forwardingSupport={this.state.forwardingSupport} registerWriteReadGap={registerWriteReadGap} />
+		Support forwarding: <input type="checkbox" onClick={this.toggleForwardingSupport} /><br />
+		Provide Compiler support: <input type="checkbox" onClick={this.toggleCompilerSupport} />
+		<Instruction forwardingSupport={this.state.forwardingSupport} compilerSupport={this.state.compilerSupport} registerWriteReadGap={registerWriteReadGap} />
 		</header>
 		</div>
 		);
