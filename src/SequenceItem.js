@@ -1,19 +1,13 @@
 import React, { Component } from 'react';
 
-class SequenceItem extends Component {
-    
-    constructor(props) {
-        super(props);
-	this.item = props.item;
-    }
-    
+class SequenceItem extends Component { 
     render() {
-	if(this.item.opcode) {
+	if(this.props.item.opcode) {
 	    return (<div className="codeSequenceItem">
-		    <span className="opcode">{this.item.opcode.name}</span>
-		    <span className="destination">{this.item.destination}</span>
-		    <span className="firstSource">{this.item.firstSource}</span>
-		    <span className="secondSource">{this.item.secondSource}</span>
+		    <span className="opcode">{this.props.item.opcode.name}</span>
+		    <span className="destination">{this.props.item.destination}</span>
+		    <span className="firstSource">{this.props.item.firstSource}</span>
+		    <span className="secondSource">{this.props.item.secondSource}</span>
 		    </div>
 		    );
 	}
@@ -24,5 +18,4 @@ class SequenceItem extends Component {
 	}
     }
 }
-
 export default SequenceItem;
