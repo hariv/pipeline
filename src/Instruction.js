@@ -35,10 +35,7 @@ class Instruction extends Component {
 	
 	instructionList.pop();
 	
-	//this.setState({instructions: instructionList});
-	this.setState(state => ({
-		    instructions: instructionList
-		}));
+	this.setState({instructions: instructionList});
     }
     
     toggleForwardingSupport() {
@@ -78,10 +75,8 @@ class Instruction extends Component {
 	instruction = [{opcode: opcode, destination: destination, firstSource: firstSource, secondSource: secondSource}];
 	instructionList = instructionList.concat(instruction);
 	
-	//this.setState({instructions: instructionList});
-	this.setState(state => ({
-		    instructions: instructionList
-		}));
+	this.setState({instructions: instructionList});
+    
     }
     
     isDependent(earlierInstruction, laterInstruction) {
@@ -126,10 +121,8 @@ class Instruction extends Component {
 		    executionSequence.push("NOPS");
 	    }
 	}
-	//this.setState({codeSequence: executionSequence});
-	this.setState(state => ({
-		    codeSequence: executionSequence
-		}));
+	this.setState({codeSequence: executionSequence});
+	
     }
     
     change() {
@@ -138,20 +131,11 @@ class Instruction extends Component {
         opcode = JSON.parse(opcode.options[opcode.selectedIndex].value);
 	
 	if(opcode.name === "LW")
-	    //this.setState({memory: "load"});
-	    this.setState(state => ({
-			memory: "load"
-		    }));
+		this.setState({memory: "load"});
 	else if(opcode.name === "SW")
-	    //this.setState({memory: "store"});
-	    this.setState(state => ({
-			memory: "store"
-		    }));
+	    this.setState({memory: "store"});
 	else
-	    this.setState(state => ({
-			memory: undefined
-		    }));
-	    //this.setState({memory: undefined});
+	    this.setState({memory: undefined});
     }
     
     render() { 
