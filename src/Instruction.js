@@ -109,11 +109,11 @@ class Instruction extends Component {
     
     
     getExecutionSequence() {
-	let instructionDataDependencyList = this.buildInstructionDependencyList()[0], executionSequence;
-	executionSequence = this.insertNOPS(instructionDataDependencyList);
+	let instructionDependencyList = this.buildInstructionDependencyList(), executionSequence;
+	executionSequence = this.insertNOPS(instructionDependencyList[0]);
 	
 	if(this.compilerSupport)
-	    this.scheduleCode(executionSequence, instructionDataDependencyList);
+	    this.scheduleCode(executionSequence, instructionDependencyList);
 	
 	this.setState({codeSequence: executionSequence});
     }
