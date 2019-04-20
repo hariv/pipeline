@@ -73,25 +73,43 @@ class Instruction extends Component {
     
     }
     
-    isDependent(earlierInstruction, laterInstruction) {
+    isDataDependent(earlierInstruction, laterInstruction) {
 	return (earlierInstruction.destination === laterInstruction.firstSource || earlierInstruction.destination === laterInstruction.secondSource);
     }
     
+    isAntiDependent(earlierInstruction, laterInstruction) {
+	return (earlierInstruction.firstSource === laterInstruction.destination || earlierInstruction.secondSource === laterInstruction.destination);
+    }
+    
+    isOutputDependent(earlierInstruction, laterInstruction) {
+	return (earlierInstruction.destination === laterInstruction.destination);
+    }
+    
     buildInstructionDependencyList() {
-	let numInstructions, instructionDependencyList = [], i, j;
+	let numInstructions, instructionDataDependencyList = [], instructionAntiDependencyList = [], instructionOutputDependencyList = [], i, j;
 	numInstructions = this.state.instructions.length;
-	for(i=0;i<numInstructions;i++)
-	    for(j=i+1;j<numInstructions;j++)
-		if(this.isDependent(this.state.instructions[i], this.state.instructions[j])) {
-		    instructionDependencyList[i] = j;
+	for(i=0;i<numInstructions;i++) {
+	    for(j=i+1;j<numInstructions;j++) {
+		if(this.isDataDependent(this.state.instructions[i], this.state.instructions[j])) {
+		    instructionDataDependencyList[i] = j;
 		    break;
 		}
-	return instructionDependencyList;
+		if(this.isAntiDependent(this.state.instructions[i], this.state.instructions[j])) {
+		    instructionAntiDependencyList[i] = j;
+		    break;
+		}
+		if(this.isOutputDependent(this.state.instructions[i], this.state.instructions[j])) {
+		    instructionOutputDependencyList[i] = j;
+		    break;
+		}  
+	    }
+	}
+	return [instructionDataDependencyList, instructionAntiDependencyList, instructionOutputDependencyList];
     }
     
     
     getExecutionSequence() {
-	let instructionDependencyList = this.buildInstructionDependencyList();
+	let instructionDependencyList = this.buildInstructionDependencyList()[0];
 	this.insertNOPS(instructionDependencyList);
     }
     
