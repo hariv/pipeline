@@ -109,8 +109,13 @@ class Instruction extends Component {
     
     
     getExecutionSequence() {
-	let instructionDependencyList = this.buildInstructionDependencyList()[0];
-	this.insertNOPS(instructionDependencyList);
+	let instructionDataDependencyList = this.buildInstructionDependencyList()[0], executionSequence;
+	executionSequence = this.insertNOPS(instructionDataDependencyList);
+	
+	if(this.compilerSupport)
+	    this.scheduleCode(executionSequence, instructionDataDependencyList);
+	
+	this.setState({codeSequence: executionSequence});
     }
     
     scheduleCode(executionSequence, instructionDependencyList) {
@@ -137,10 +142,7 @@ class Instruction extends Component {
 		    executionSequence.push("NOPS");
 	    }
 	}
-	if(this.compilerSupport)
-	    this.scheduleCode(executionSequence, instructionDependencyList);
-	this.setState({codeSequence: executionSequence});
-	
+	return executionSequence;
     }
     
     change() {
