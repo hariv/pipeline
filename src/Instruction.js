@@ -86,17 +86,15 @@ class Instruction extends Component {
     }
     
     buildInstructionDependencyList() {
-	let numInstructions, instructionDataDependencyList = [], instructionAntiDependencyList = [], instructionOutputDependencyList = [], i, j;
+	let numInstructions, instructionDataDependencyList = {}, instructionAntiDependencyList = {}, instructionOutputDependencyList = {}, i, j;
 	numInstructions = this.state.instructions.length;
 	for(i=0;i<numInstructions;i++) {
 	    for(j=i+1;j<numInstructions;j++) {
 		if(this.isDataDependent(this.state.instructions[i], this.state.instructions[j])) {
 		    instructionDataDependencyList[i] = j;
-		    break;
 		}
 		if(this.isAntiDependent(this.state.instructions[i], this.state.instructions[j])) {
 		    instructionAntiDependencyList[i] = j;
-		    break;
 		}
 		if(this.isOutputDependent(this.state.instructions[i], this.state.instructions[j])) {
 		    instructionOutputDependencyList[i] = j;
